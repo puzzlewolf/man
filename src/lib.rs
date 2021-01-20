@@ -13,6 +13,7 @@ mod flag;
 mod man;
 mod option;
 mod section;
+mod subcommand;
 
 pub mod prelude;
 
@@ -24,3 +25,4 @@ pub use flag::Flag;
 pub use man::Manual;
 pub use option::Opt;
 pub use section::Section;
+pub use subcommand::Subcommand;

@@ -12,6 +12,7 @@ pub struct Manual {
   authors: Vec<Author>,
   flags: Vec<Flag>,
   options: Vec<Opt>,
+  subcommands: Vec<Subcommand>,
   environment: Vec<Env>,
   arguments: Vec<Arg>,
   custom_sections: Vec<Section>,
@@ -30,6 +31,7 @@ impl Manual {
       authors: vec![],
       flags: vec![],
       options: vec![],
+      subcommands: vec![],
       arguments: vec![],
       environment: vec![],
       custom_sections: vec![],
@@ -79,6 +81,12 @@ impl Manual {
     self
   }
 
+  /// Add a subcommand.
+  pub fn subcommand(mut self, subcommand: Subcommand) -> Self {
+    self.subcommands.push(subcommand);
+    self
+  }
+
   /// Add an option.
   pub fn option(mut self, opt: Opt) -> Self {
     self.options.push(opt);
@@ -116,10 +124,12 @@ impl Manual {
       &self.flags,
       &self.options,
       &self.arguments,
+      &self.subcommands,
     );
     page = description(page, &self.description);
     page = flags(page, &self.flags);
     page = options(page, &self.options);
+    page = subcommands(page, &self.subcommands);
     page = env(page, &self.environment);
     for section in self.custom_sections.into_iter() {
       page = custom(page, section);
@@ -169,6 +179,7 @@ fn synopsis(
   flags: &[Flag],
   options: &[Opt],
   args: &[Arg],
+  subcommands: &[Subcommand],
 ) -> Roff {
   let flags = match flags.len() {
     0 => "".into(),
@@ -178,11 +189,16 @@ fn synopsis(
     0 => "".into(),
     _ => " [OPTIONS]".into(),
   };
+  let subcommands = match subcommands.len() {
+    0 => "".into(),
+    _ => " <SUBCOMMAND>".into(),
+  };
 
   let mut msg = vec![];
   msg.push(bold(name));
   msg.push(flags);
   msg.push(options);
+  msg.push(subcommands);
 
   for arg in args {
     msg.push(format!(" {}", arg.name));
@@ -259,6 +275,37 @@ fn flags(page: Roff, flags: &[Flag]) -> Roff {
     }
   }
   page.section("FLAGS", &arr)
+}
+
+/// Create a `SUBCOMMANDS` section.
+///
+/// ## Formatting
+/// ```txt
+/// SUBCOMMANDS
+/// ```
+fn subcommands(page: Roff, subcommands: &[Subcommand]) -> Roff {
+  if subcommands.is_empty() {
+    return page;
+  }
+
+  let last = subcommands.len() - 1;
+  let mut arr: Vec<String> = vec![];
+  for (index, subcommand) in subcommands.iter().enumerate() {
+    let mut args: Vec<String> = vec![];
+    if let Some(ref name) = subcommand.name{
+      args.push(bold(&name));
+    }
+    let desc = match subcommand.help {
+      Some(ref desc) => desc.to_string(),
+      None => "".to_string(),
+    };
+    arr.push(list(&args, &[desc]));
+
+    if index != last {
+      arr.push(String::from("\n\n"));
+    }
+  }
+  page.section("SUBCOMMANDS", &arr)
 }
 
 /// Create a `OPTIONS` section.

@@ -45,6 +45,11 @@ fn main() {
         .prompt("#")
         .command("auth-service"),
     )
+    .subcommand(
+      Subcommand::new()
+        .name("encrypt")
+        .help("explain the encrypt subcommand"),
+    )
     .custom(
       Section::new("custom section")
         .paragraph("text for the custom section")

@@ -3,12 +3,14 @@ mod custom;
 mod environment;
 mod flag;
 mod option;
+mod subcommand;
 
 use self::author::Author;
 use self::custom::Para;
 use self::environment::Env;
 use self::flag::Flag;
 use self::option::Opt;
+use self::subcommand::Subcommand;
 use roff::{bold, italic, list, Roff, Troffable};
 use std::convert::AsRef;
 
@@ -18,6 +20,7 @@ pub struct Man {
   name: String,
   help: Option<String>,
   authors: Vec<Author>,
+  subcommands: Vec<Subcommand>,
   flags: Vec<Flag>,
   options: Vec<Opt>,
   environment: Vec<Env>,
