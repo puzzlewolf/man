@@ -8,6 +8,7 @@ pub struct Manual {
   about: Option<String>,
   description: Option<String>,
   date: Option<String>,
+  header_title: Option<String>,
   version: Option<String>,
   authors: Vec<Author>,
   flags: Vec<Flag>,
@@ -28,6 +29,7 @@ impl Manual {
       description: None,
       date: None,
       version: None,
+      header_title: None,
       authors: vec![],
       flags: vec![],
       options: vec![],
@@ -60,6 +62,12 @@ impl Manual {
   /// Add a version
   pub fn version<S: Into<String>>(mut self, version: S) -> Self {
     self.version = Some(version.into());
+    self
+  }
+
+  /// Add a header title, middle of top line.
+  pub fn header_title<S: Into<String>>(mut self, header_title: S) -> Self {
+    self.header_title = Some(header_title.into());
     self
   }
 
@@ -115,7 +123,7 @@ impl Manual {
 
   /// Render to a string.
   pub fn render(self) -> String {
-    let title_line = title_line(self.name.clone(), self.version, self.date);
+    let title_line = title_line(self.name.clone(), self.version, self.date, self.header_title);
     let mut page = Roff::new(&title_line, 5);
     page = about(page, &self.name, &self.about);
     page = synopsis(
@@ -495,6 +503,7 @@ fn title_line(
   name: String,
   version: Option<String>,
   date: Option<String>,
+  header_title: Option<String>,
 ) -> String {
   // NOTE(ds): This is less elegant than it could be because Roff::new isn't set up
   // to accept date or version information right now.  I'll submit a PR to that
@@ -510,7 +519,10 @@ fn title_line(
     Some(version) => title_line.push_str(format!(" \"{}\"", version).as_str()),
     None => title_line.push_str(" \" \""),
   }
-  title_line.push_str(" \"User Commands\"");
+  match header_title {
+      Some(ht) => title_line.push_str(format!(" \"{}\"", ht).as_str()),
+      None => title_line.push_str(" \"User Commands\""),
+  }
   title_line
 }
 
