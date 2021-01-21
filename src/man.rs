@@ -215,7 +215,11 @@ fn synopsis(
   msg.push(subcommands);
 
   for arg in args {
-    msg.push(format!(" <{}>", arg.name));
+    if arg.required {
+      msg.push(format!(" <{}>", arg.name));
+    } else {
+      msg.push(format!(" [{}]", arg.name));
+    }
   }
 
   page.section("SYNOPSIS", &msg)
@@ -335,7 +339,7 @@ fn arguments(page: Roff, args: &[Arg]) -> Roff {
   let mut arr: Vec<String> = vec![];
   for (index, arg) in args.iter().enumerate() {
     let mut args: Vec<String> = vec![];
-    args.push(["<", &arg.name, ">"].join(""));
+    args.push(arg.name.clone());
     let desc = match arg.description {
       Some(ref desc) => desc.to_string(),
       None => "".to_string(),
