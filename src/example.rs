@@ -1,39 +1,39 @@
 /// Add a examples section
 #[derive(Debug, Clone, Default)]
 pub struct Example {
-  pub(crate) prompt: &'static str,
-  pub(crate) text: Option<&'static str>,
-  pub(crate) command: Option<&'static str>,
-  pub(crate) output: Option<&'static str>,
+  pub(crate) prompt: String,
+  pub(crate) text: Option<String>,
+  pub(crate) command: Option<String>,
+  pub(crate) output: Option<String>,
 }
 
 impl Example {
   pub fn new() -> Self {
     Self {
-      prompt: "$",
+      prompt: "$".into(),
       text: None,
       command: None,
       output: None,
     }
   }
 
-  pub fn prompt(mut self, prompt: &'static str) -> Self {
-    self.prompt = prompt;
+  pub fn prompt(mut self, prompt: &str) -> Self {
+    self.prompt = prompt.into();
     self
   }
 
-  pub fn text(mut self, text: &'static str) -> Self {
-    self.text = Some(text);
+  pub fn text(mut self, text: &str) -> Self {
+    self.text = Some(text.into());
     self
   }
 
-  pub fn command(mut self, command: &'static str) -> Self {
-    self.command = Some(command);
+  pub fn command(mut self, command: &str) -> Self {
+    self.command = Some(command.into());
     self
   }
 
-  pub fn output(mut self, output: &'static str) -> Self {
-    self.output = Some(output);
+  pub fn output(mut self, output: &str) -> Self {
+    self.output = Some(output.into());
     self
   }
 }

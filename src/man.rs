@@ -508,19 +508,19 @@ fn examples(page: Roff, examples: &[Example]) -> Roff {
     return page;
   };
   let mut arr = vec![];
-  for example in examples {
-    let text = example.text.unwrap_or("");
-    let mut full_command = String::from(example.prompt);
+  for example in examples.iter().cloned() {
+    let text = example.text.unwrap_or("".into());
+    let mut full_command = example.prompt.to_string();
     if let Some(command) = example.command {
       full_command.push_str(" ");
-      full_command.push_str(command);
+      full_command.push_str(&command);
     };
     let output = match example.output {
       Some(output) => {
         // For now, we need to manually add the line break in the list
         // see https://github.com/killercup/roff-rs/issues/5
         let mut full_output = String::from("\n.br\n");
-        full_output.push_str(output);
+        full_output.push_str(&output);
         full_output.push_str("\n");
         full_output
       }
