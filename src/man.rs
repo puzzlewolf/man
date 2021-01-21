@@ -123,7 +123,12 @@ impl Manual {
 
   /// Render to a string.
   pub fn render(self) -> String {
-    let title_line = title_line(self.name.clone(), self.version, self.date, self.header_title);
+    let title_line = title_line(
+      self.name.clone(),
+      self.version,
+      self.date,
+      self.header_title,
+    );
     let mut page = Roff::new(&title_line, 5);
     page = about(page, &self.name, &self.about);
     page = synopsis(
@@ -519,8 +524,8 @@ fn title_line(
     None => title_line.push_str(" \" \""),
   }
   match header_title {
-      Some(ht) => title_line.push_str(format!(" \"{}\"", ht).as_str()),
-      None => title_line.push_str(" \"User Commands\""),
+    Some(ht) => title_line.push_str(format!(" \"{}\"", ht).as_str()),
+    None => title_line.push_str(" \"User Commands\""),
   }
   title_line
 }
