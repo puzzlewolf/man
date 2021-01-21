@@ -143,6 +143,7 @@ impl Manual {
     page = flags(page, &self.flags);
     page = options(page, &self.options);
     page = subcommands(page, &self.subcommands);
+    page = arguments(page, &self.arguments);
     page = env(page, &self.environment);
     for section in self.custom_sections.into_iter() {
       page = custom(page, section);
@@ -317,6 +318,35 @@ fn subcommands(page: Roff, subcommands: &[Subcommand]) -> Roff {
     }
   }
   page.section("SUBCOMMANDS", &arr)
+}
+
+/// Create a `ARGUMENTS` section.
+///
+/// ## Formatting
+/// ```txt
+/// ARGS
+/// ```
+fn arguments(page: Roff, args: &[Arg]) -> Roff {
+  if args.is_empty() {
+    return page;
+  }
+
+  let last = args.len() - 1;
+  let mut arr: Vec<String> = vec![];
+  for (index, arg) in args.iter().enumerate() {
+    let mut args: Vec<String> = vec![];
+    args.push(arg.name.clone());
+    let desc = match arg.description {
+      Some(ref desc) => desc.to_string(),
+      None => "".to_string(),
+    };
+    arr.push(list(&args, &[desc]));
+
+    if index != last {
+      arr.push(String::from("\n\n"));
+    }
+  }
+  page.section("ARGS", &arr)
 }
 
 /// Create a `OPTIONS` section.
