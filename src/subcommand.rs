@@ -1,25 +1,22 @@
 /// Subcommands
 #[derive(Debug, Clone, Default)]
 pub struct Subcommand {
-  pub(crate) name: Option<String>,
-  pub(crate) help: Option<String>,
+  pub(crate) name: String,
+  pub(crate) description: Option<String>,
 }
 
 impl Subcommand {
   /// Create a new instance.
-  pub fn new() -> Self {
-    Self::default()
+  pub fn new(name: &str) -> Self {
+    Self {
+        name: name.into(),
+        description: None
+    }
   }
 
-  /// Set the name value.
-  pub fn name(mut self, name: &str) -> Self {
-    self.name = Some(name.into());
-    self
-  }
-
-  /// Set the help value.
-  pub fn help(mut self, help: &str) -> Self {
-    self.help = Some(help.into());
+  /// Set the description value.
+  pub fn description(mut self, description: &str) -> Self {
+    self.description = Some(description.into());
     self
   }
 }

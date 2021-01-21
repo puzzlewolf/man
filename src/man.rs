@@ -300,10 +300,8 @@ fn subcommands(page: Roff, subcommands: &[Subcommand]) -> Roff {
   let mut arr: Vec<String> = vec![];
   for (index, subcommand) in subcommands.iter().enumerate() {
     let mut args: Vec<String> = vec![];
-    if let Some(ref name) = subcommand.name{
-      args.push(bold(&name));
-    }
-    let desc = match subcommand.help {
+    args.push(bold(&subcommand.name));
+    let desc = match subcommand.description {
       Some(ref desc) => desc.to_string(),
       None => "".to_string(),
     };

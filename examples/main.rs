@@ -47,9 +47,8 @@ fn main() {
         .command("auth-service"),
     )
     .subcommand(
-      Subcommand::new()
-        .name("encrypt")
-        .help("explain the encrypt subcommand"),
+      Subcommand::new("encrypt")
+        .description("explain the encrypt subcommand"),
     )
     .custom(
       Section::new("custom section")
