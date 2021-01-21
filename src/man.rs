@@ -4,7 +4,7 @@ use roff::{bold, italic, list, Roff, Troffable};
 /// The main man page struct.
 #[derive(Debug, Clone)]
 pub struct Manual {
-  name: String,
+  pub name: String,
   about: Option<String>,
   description: Option<String>,
   date: Option<String>,
@@ -215,6 +215,9 @@ fn synopsis(
   msg.push(subcommands);
 
   for arg in args {
+    if arg.name == "FILE" {
+      msg.push(" [--]".into());
+    }
     if arg.required {
       msg.push(format!(" <{}>", arg.name));
     } else {
