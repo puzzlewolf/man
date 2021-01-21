@@ -129,7 +129,7 @@ impl Man {
     page = flags(page, &self.flags);
     page = options(page, &self.options);
     page = environment(page, &self.environment);
-    page = exit_status(page);
+    //page = exit_status(page);
     page = authors(page, &self.authors);
     page.render()
   }

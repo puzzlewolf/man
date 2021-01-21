@@ -142,7 +142,7 @@ impl Manual {
     for section in self.custom_sections.into_iter() {
       page = custom(page, section);
     }
-    page = exit_status(page);
+    //page = exit_status(page);
     page = examples(page, &self.examples);
     page = authors(page, &self.authors);
     page.render()
