@@ -507,6 +507,7 @@ fn title_line(
   // to accept date or version information right now.  I'll submit a PR to that
   // crate, but this (mostly) works in the meantime
   let man_num: i8 = 1;
+  let name = name.replace(" ", "-");
   let mut title_line = format!("{} \"{}\"", name, man_num);
   match date {
     // This Roff::new capitalizes the date, incorrectly
