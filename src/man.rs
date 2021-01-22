@@ -145,11 +145,11 @@ impl Manual {
     page = subcommands(page, &self.subcommands);
     page = arguments(page, &self.arguments);
     page = env(page, &self.environment);
+    page = examples(page, &self.examples);
     for section in self.custom_sections.into_iter() {
       page = custom(page, section);
     }
     //page = exit_status(page);
-    page = examples(page, &self.examples);
     page = authors(page, &self.authors);
     page.render()
   }
