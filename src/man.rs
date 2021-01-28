@@ -173,7 +173,7 @@ impl Manual {
 /// ```
 fn about(page: Roff, name: &str, desc: &Option<String>) -> Roff {
   let desc = match desc {
-    Some(ref desc) => format!("{} - {}", name, desc),
+    Some(ref desc) => format!("{} - {}", name.replace(" ","-"), desc),
     None => name.to_owned(),
   };
 
