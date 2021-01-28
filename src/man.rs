@@ -16,6 +16,7 @@ pub struct Manual {
   subcommands: Vec<Subcommand>,
   environment: Vec<Env>,
   arguments: Vec<Arg>,
+  see_also: Vec<String>,
   custom_sections: Vec<Section>,
   examples: Vec<Example>,
 }
@@ -36,6 +37,7 @@ impl Manual {
       subcommands: vec![],
       arguments: vec![],
       environment: vec![],
+      see_also: vec![],
       custom_sections: vec![],
       examples: vec![],
     }
@@ -101,6 +103,12 @@ impl Manual {
     self
   }
 
+  /// Add a paragraph to see also
+  pub fn see_also(mut self, paragraph: String) -> Self {
+    self.see_also.push(paragraph);
+    self
+  }
+
   /// Add a custom section
   pub fn custom(mut self, custom_section: Section) -> Self {
     self.custom_sections.push(custom_section);
@@ -146,6 +154,7 @@ impl Manual {
     page = arguments(page, &self.arguments);
     page = env(page, &self.environment);
     page = examples(page, &self.examples);
+    page = see_also(page, &self.see_also);
     for section in self.custom_sections.into_iter() {
       page = custom(page, section);
     }
@@ -469,6 +478,26 @@ fn exit_status(page: Roff) -> Roff {
       list(&[bold("101")], &["The program panicked."]),
     ],
   )
+}
+
+/// Create a See Also section.
+///
+/// ## Formatting
+/// ```txt
+/// SEE ALSO
+///        Text of first paragraph
+///
+///        Text of second paragraph
+///
+/// ```
+fn see_also(page: Roff, paragraphs: &Vec<String>) -> Roff {
+  let mut p: Vec<String> = vec![];
+  for paragraph in paragraphs.iter().cloned() {
+    p.push(paragraph);
+    p.push("\n\n".into())
+  }
+  //let paragraphs = paragraphs.join("\n\n");
+  page.section(&"SEE ALSO", &p)
 }
 
 /// Create a custom section.
