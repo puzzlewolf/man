@@ -562,7 +562,8 @@ fn examples(page: Roff, examples: &[Example]) -> Roff {
       }
       None => String::from("\n"),
     };
-    let example = list(&[text], &[bold(full_command.as_str()), output]);
+
+    let example = list(&[text], &[justify_left(&no_hyphenate(&bold(&full_command))), output]);
     arr.push(example);
   }
   page.section("examples", &arr)
@@ -605,4 +606,14 @@ fn title_line(
 // ```
 fn init_list() -> String {
   String::from(".P\n.RS 2\n.nf\n")
+}
+
+// NOTE: This should be upstreamed to the troff-rs crate
+fn justify_left(input: &str) -> String {
+    [".ad l", input].join("\n")
+}
+
+// NOTE: This should be upstreamed to the troff-rs crate
+fn no_hyphenate(input: &str) -> String {
+    [".nh", input].join("\n")
 }
