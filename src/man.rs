@@ -223,8 +223,9 @@ fn synopsis(
   msg.push(options);
   msg.push(subcommands);
 
+  // TODO: See clap for logic on adding [--]
   for arg in args {
-    if arg.name == "FILE" {
+    if arg.name == "FILE" || arg.name == "FILES" {
       msg.push(" [--]".into());
     }
     if arg.required {
