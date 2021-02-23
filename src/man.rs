@@ -154,10 +154,10 @@ impl Manual {
     page = arguments(page, &self.arguments);
     page = env(page, &self.environment);
     page = examples(page, &self.examples);
-    page = see_also(page, &self.see_also);
     for section in self.custom_sections.into_iter() {
       page = custom(page, section);
     }
+    page = see_also(page, &self.see_also);
     //page = exit_status(page);
     page = authors(page, &self.authors);
     page.render()
