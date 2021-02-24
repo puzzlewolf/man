@@ -282,6 +282,11 @@ fn flags(page: Roff, flags: &[Flag]) -> Roff {
     return page;
   }
 
+  let mut flags_vec = Vec::new();
+  flags_vec.extend_from_slice(flags);
+  flags_vec.sort_unstable();
+  let flags = flags_vec.as_slice();
+
   let last = flags.len() - 1;
   let mut arr: Vec<String> = vec![];
   for (index, flag) in flags.iter().enumerate() {
@@ -376,6 +381,11 @@ fn options(page: Roff, options: &[Opt]) -> Roff {
   if options.is_empty() {
     return page;
   }
+
+  let mut options_vec = Vec::new();
+  options_vec.extend_from_slice(options);
+  options_vec.sort_unstable();
+  let options = options_vec.as_slice();
 
   let last = options.len() - 1;
   let mut arr: Vec<String> = vec![];

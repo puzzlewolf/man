@@ -1,5 +1,7 @@
+use std::cmp::Ordering;
+
 /// Arguments that take values.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq)]
 pub struct Opt {
   pub(crate) name: String,
   pub(crate) default: Option<String>,
@@ -42,5 +44,33 @@ impl Opt {
   pub fn long(mut self, long: &str) -> Self {
     self.long = Some(long.into());
     self
+  }
+}
+
+impl PartialEq for Opt {
+  fn eq(&self, other: &Self) -> bool {
+    self.short == other.short && self.long == other.long
+  }
+}
+
+impl PartialOrd for Opt {
+  fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+    Some(self.cmp(other))
+  }
+}
+
+impl Ord for Opt {
+  fn cmp(&self, other: &Self) -> Ordering {
+    let s = self
+      .short
+      .as_ref()
+      .or(self.long.as_ref())
+      .map(|s| s.trim_start_matches('-').to_ascii_lowercase());
+    let o = other
+      .short
+      .as_ref()
+      .or(other.long.as_ref())
+      .map(|s| s.trim_start_matches('-').to_ascii_lowercase());
+    s.cmp(&o)
   }
 }
